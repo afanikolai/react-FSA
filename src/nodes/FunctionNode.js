@@ -8,17 +8,12 @@ import './FunctionNode.css'
 import { NodesContext } from '../App';
 import HideButton from '../components/hideButton/HideButton';
 import findNodeChildren from '../utils/findNodeChildren';
-
+import { message } from 'antd';
 // const handleStyle = { top: 10 };
 
 
 function FunctionNode({ data, id, }) {
   const [editMode, setEditMode] = useState(true);
-  const [isChildrenHidden, setChildrenHidden] = useState(false);
-  const hide = (nodeOrEdge, hidden) => {
-    nodeOrEdge.hidden = hidden;
-    return nodeOrEdge;
-  };
 
   const onNameChange = (e) => {
     data.nodeName = e.target.value;
@@ -39,23 +34,16 @@ function FunctionNode({ data, id, }) {
     setEditMode(!editMode);
   }
 
-  const hideChildren = () => {
-    // Тупое говно, потом разобраться. 
-    setChildrenHidden(!isChildrenHidden);
-    let children = findNodeChildren(id, nodesEdges.edges);
-    console.log(children)
-    children.forEach(element => {
-      let tmpNode = nodesEdges.nodes.find(item => item.id === element)
-      
-      hide(tmpNode, isChildrenHidden);
-    });
+
+  const onNameError = ()=> {
+    message.error('Error! Your field is incorrect');
   }
 
   return (
     <div className="function-node">
       <Handle type="target" position={Position.Left} className='circle-port' />
       <div className='custom-node-header'> 
-        <NodeName editMode={editMode} nodeName={data.nodeName} onChange={onNameChange}/>
+        <NodeName editMode={editMode} nodeName={data.nodeName} onChange={onNameChange} onError={onNameError}/>
         <div >
           {/* <HideButton isChildrenHidden={isChildrenHidden} onClick={hideChildren}/> */}
           <EditButton editMode={editMode} onClick={changeEditMode} />
@@ -63,7 +51,7 @@ function FunctionNode({ data, id, }) {
       </div>
 
       <div className='custom-node-content'>
-        <NodeImportance editMode={editMode} relative={data.nodeRelativeImportance.toFixed()} 
+        <NodeImportance editMode={editMode} relative={data.nodeRelativeImportance.toFixed()} onError={onNameError} 
         absolute={data.nodeAbsoluteImportance} onChange={onImportanceChange}/>
       </div>
       <Handle type="source" position={Position.Right} id="to-func" className='circle-port' />

@@ -57,7 +57,9 @@ currentLevelNodes.forEach(element => {
     if (children !== undefined)
         {
         children.forEach(elem =>{
-            findRelativeImportance(data, nodes.find(item => item.id === elem).id);
+            if (typeof elem !== 'array')
+            console.log(data, nodes, elem, children)
+                findRelativeImportance(data, nodes.find(item => item.id === elem).id);
         })
     }
     

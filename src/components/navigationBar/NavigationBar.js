@@ -4,15 +4,14 @@ import './NavigationBar.css';
 
 
 
-function NavigationBar({onClickSave, onClickLoad, onClickNew}) {
+function NavigationBar({onClickSave, onClickLoad, onClickNew, onClickHelp}) {
 
     return (
       <div className="NavigationBar">
         <Button onClick={onClickNew}>New file</Button>
         <Button onClick={onClickLoad}>Open file</Button>
         <Button onClick={onClickSave}>Save file</Button>
-        <Button>Help</Button>
-        <Button>Contact author</Button>
+        <Button onClick={onClickHelp} >Help</Button>
       </div>
     );
   }

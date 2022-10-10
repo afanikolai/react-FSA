@@ -4,7 +4,9 @@ import ReactFlow, { Background, Controls, MiniMap, applyEdgeChanges, applyNodeCh
 import './App.css';
 import 'reactflow/dist/style.css';
 import FunctionNode from './nodes/FunctionNode';
+import ModuleNode from './nodes/ModuleNode';
 import NavigationBar from './components/navigationBar/NavigationBar';
+
 
 let id = 1;
 const getId = () => `${id++}`;
@@ -14,7 +16,7 @@ const fitViewOptions = {
 
 };
 
-const nodeTypes = { functionNode: FunctionNode };
+const nodeTypes = { functionNode: FunctionNode, moduleNode: ModuleNode };
 
 const edgeOptions = {
   
@@ -24,17 +26,17 @@ const edgeOptions = {
 const initialNodes = [
   {
     id: 'func0',
-    data: {label: 'Functions', nodeAbsoluteImportance: 10, nodeRelativeImportance: 100 },
+    data: {label: 'Functions', nodeAbsoluteImportance: 10, nodeRelativeImportance: 100, nodetype: 'function'},
     sourcePosition: 'right',
     type: 'input',
     position: { x: 200, y: 200 },
   },
   // {
   //   id: 'module0',
-  //   data: {label: 'Modules'},
+  //   data: {label: 'Modules', nodeAbsoluteCost: 10, nodeRelativeCost: 100, nodetype: 'module'},
   //   sourcePosition: 'left',
   //   type: 'input',
-  //   position: { x: 1200, y: 200 },
+  //   position: { x: 1800, y: 200 },
   // },
 
 ];
@@ -61,7 +63,7 @@ function App() {
   // console.log(nodes, edges);
   
   const onFNodeChange = () => {
-    // console.log(nodes)
+    // console.log()
   }
 
 
@@ -77,16 +79,32 @@ function App() {
         // need to remove the wrapper bounds, in order to get the correct position
         const { top, left } = reactFlowWrapper.current.getBoundingClientRect();
         const id = getId();
-
+        // let newNode = {};
         const newNode = {
           id,
           // removing the half of the node height (50) to center the new node
           position: project({ x: event.clientX - left , y: event.clientY - top - 50 }),
           data: {nodeName: '', onChange: onFNodeChange, nodeAbsoluteImportance: 0, nodeRelativeImportance: 0, nodes:nodes, id: id},
           type: 'functionNode',
-          hidden: false, 
         };
-
+        // if (nodes.find(item => item.id === connectingNodeId.current).data.nodetype === 'function'){
+        //   newNode = {
+        //     id,
+        //     // removing the half of the node height (50) to center the new node
+        //     position: project({ x: event.clientX - left , y: event.clientY - top - 50 }),
+        //     data: {nodeName: '', onChange: onFNodeChange, nodeAbsoluteImportance: 0, nodeRelativeImportance: 0, nodes:nodes, id: id, nodetype: 'function'},
+        //     type: 'functionNode',
+        //   };
+        // }
+        // else {
+        //   newNode = {
+        //     id,
+        //     // removing the half of the node height (50) to center the new node
+        //     position: project({ x: event.clientX - left , y: event.clientY - top - 50 }),
+        //     data: {nodeName: '', onChange: onFNodeChange, nodeAbsoluteCost: 0, nodeRelativeCost: 0, nodes:nodes, id: id, nodetype: 'module'},
+        //     type: 'moduleNode',
+        //   };
+        // }
         setNodes((nds) => nds.concat(newNode));
         setEdges((eds) => eds.concat({ id, source: connectingNodeId.current, target: id }));
       }

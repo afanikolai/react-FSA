@@ -7,7 +7,9 @@ export default function findNodeChildren(currentNodeID, edges){
             children.push(edges[i].target); 
             let tmp = findNodeChildren(edges[i].target,edges);
             if (tmp.length>0)
-                children.push(tmp);
+                tmp.forEach(element => {
+                    children.push(element)
+                });
         }
     };
     return children;
